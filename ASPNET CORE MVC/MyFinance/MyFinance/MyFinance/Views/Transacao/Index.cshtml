@@ -1,0 +1,65 @@
+﻿<h3>Minhas Transacoes</h3>
+
+@*
+    Sera mesclado codigo HTML e C#
+    Criar um tabela para recepcionar os dados que estao vindo do controller
+*@
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Id</th>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th>Historico</th>
+                    <th>Conta</th>
+                    <th>Plano de conta</th>
+                </tr>
+            </thead>
+            @*
+                Criar um forech para trazer linha a linha
+                Fazer uma conversao explicita no forech
+            *@
+            @{
+                foreach (var item in (List<TransacaoModel>)ViewBag.ListaTransacao)
+                {
+                    <tbody>
+                        <tr>
+                            @*No botao excluir passar no evento onClick o Item do ID*@
+                            <th>
+                                <button type="button" class="btn btn-info" onclick="Editar(@item.Id.ToString())">Editar</button>
+                                <button type="button" class="btn btn-danger" onclick="Excluir(@item.Id.ToString())">Excluir</button>
+                            </th>
+                            <th>@item.Id.ToString()</th>
+                            <th>@item.Data.ToString()</th>
+                            <th>@item.Tipo.ToString().Replace("R", "Receita").Replace("D", "Despesa")</th>
+                            <th>R$ @item.Valor.ToString()</th>
+                            <th>@item.Descricao.ToString()</th>
+                            <th>@item.Nome_Conta.ToString()</th>
+                            <th>@item.Nome_Plano_Conta.ToString()</th>
+                        </tr>
+                    </tbody>
+                }
+            }
+        </table>
+    </div>
+</div>
+<button type="button" class="btn btn-block btn-primary" role="button" onclick="Criar()">Criar Transacao</button>
+
+<script>
+    function Criar() {
+        window.location.href = "../Transacao/Registrar";
+    }
+
+    function Excluir(id) {
+        window.location.href = "../Transacao/ExcluirTransacao/" + id;
+    }
+
+    function Editar(id) {
+        window.location.href = "../Transacao/Registrar/" + id;
+    }
+</script>

@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Minhas contas</h2>
+
+@*
+    Sera mesclado codigo HTML e C#
+    Criar um tabela para recepcionar os dados que estao vindo do controller
+*@
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Saldo</th>
+                </tr>
+            </thead>
+
+            @*
+                Criar um forech para trazer linha a linha
+                Fazer uma conversao explicita no forech
+            *@
+            @{
+                foreach (var item in (List<ContaModel>)ViewBag.ListaConta)
+                {
+                    <tbody>
+                        <tr>
+                            @*No botao excluir passar no evento onClick o Item do ID*@
+                            <th><button type="button" class="btn btn-danger" onclick="Excluir(@item.Id.ToString())">Excluir</button></th>
+                            <th>@item.Id.ToString()</th>
+                            <th>@item.Nome.ToString()</th>
+                            <th>@item.Saldo.ToString()</th>
+                        </tr>
+                    </tbody>
+                }
+            }
+        </table>
+    </div>
+</div>
+<button type="button" class="btn btn-block btn-primary" role="button" onclick="CriarConta()">Criar conta</button>
+
+<script>
+    function CriarConta() {
+        window.location.href = "../Conta/CriarConta";
+    }
+
+    function Excluir(id_conta) {
+        window.location.href = "../Conta/ExcluirConta/" + id_conta;
+    }
+</script>

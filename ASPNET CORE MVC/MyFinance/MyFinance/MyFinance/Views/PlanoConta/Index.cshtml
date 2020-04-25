@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Planos de contas</h2>
+
+@*
+    Sera mesclado codigo HTML e C#
+    Criar um tabela para recepcionar os dados que estao vindo do controller
+*@
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Id</th>
+                    <th>Descricao</th>
+                    <th>Tipo de Despesa</th>
+                </tr>
+            </thead>
+
+            @*
+                Criar um forech para trazer linha a linha
+                Fazer uma conversao explicita no forech
+            *@
+            @{
+                foreach (var item in (List<PlanoContaModel>)ViewBag.ListaPlanoConta)
+                {
+                    <tbody>
+                        <tr>
+                            @*No botao excluir passar no evento onClick o Item do ID*@
+                            <th>
+                                <button type="button" class="btn btn-info" onclick="Editar(@item.Id.ToString())">Editar</button>
+                                <button type="button" class="btn btn-danger" onclick="Excluir(@item.Id.ToString())">Excluir</button>
+                            </th>
+                            <th>@item.Id.ToString()</th>
+                            <th>@item.Descricao.ToString()</th>
+                            <th>@item.Tipo.ToString().Replace("R","Receita").Replace("D","Despesa")</th>
+                        </tr>
+                    </tbody>
+                }
+            }
+        </table>
+    </div>
+</div>
+<button type="button" class="btn btn-block btn-primary" role="button" onclick="CriarPlanoConta()">Criar Plano de Contas</button>
+
+<script>
+    function CriarPlanoConta() {
+        window.location.href = "../PlanoConta/CriarPlanoConta";
+    }
+
+    function Excluir(id_conta) {
+        window.location.href = "../PlanoConta/ExcluirPlanoConta/" + id_conta;
+        }
+
+    function Editar(id_conta) {
+        window.location.href = "../PlanoConta/CriarPlanoConta/" + id_conta;
+    }
+</script>

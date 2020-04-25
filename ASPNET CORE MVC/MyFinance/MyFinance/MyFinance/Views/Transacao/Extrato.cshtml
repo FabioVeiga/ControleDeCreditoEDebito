@@ -1,0 +1,115 @@
+﻿@model TransacaoModel
+
+
+<h2>Meu Extrato</h2>
+
+<div class="container">
+    <form asp-controller="Transacao" asp-action="Extrato">
+        <div class="form-group">
+            <label>Data transacao (inicio):</label>
+            <input type="date" class="form-control" asp-for="Data">
+        </div>
+
+        <div class="form-group">
+            <label>Data transacao (fim):</label>
+            <input type="date" class="form-control" asp-for="DataFinal">
+        </div>
+        <label>Tipo: </label>
+        <div class="radio">
+            <label><input type="radio" asp-for="Tipo" value="A" checked>Receitas e Despesas</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" asp-for="Tipo" value="R">Receitas</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" asp-for="Tipo" value="D">Despesas</label>
+        </div>
+        <div class="form-group">
+            <label>Conta:</label>
+            <select class="form-control" asp-for="Conta_Id">
+                @{
+                    foreach (var item in (List<ContaModel>)ViewBag.ListaContas)
+                    {
+                        <option value="@item.Id.ToString()">@item.Nome.ToString()</option>
+                    }
+                }
+            </select>
+            <br />
+            <button type="submit" class="btn btn-success btn-block">Consultar</button>
+        </div>
+    </form>
+</div>
+<br />
+
+<div class="container">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Id</th>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Valor</th>
+                    <th>Historico</th>
+                    <th>Conta</th>
+                    <th>Plano de conta</th>
+                </tr>
+            </thead>
+            @*
+                Criar um forech para trazer linha a linha
+                Fazer uma conversao explicita no forech
+            *@
+            @{
+                var totalReceitas = 0.0;
+                var totalDespesas = 0.0;
+                var total = 0.0;
+                foreach (var item in (List<TransacaoModel>)ViewBag.ListaTransacao)
+                {
+                    <tbody>
+                        <tr>
+                            @*No botao excluir passar no evento onClick o Item do ID*@
+                            <th>
+                                <button type="button" class="btn btn-info" onclick="Editar(@item.Id.ToString())">Editar</button>
+                            </th>
+                            <th>@item.Id.ToString()</th>
+                            <th>@item.Data.ToString()</th>
+                            <th>@item.Tipo.ToString().Replace("R", "Receita").Replace("D", "Despesa")</th>
+                            <th>R$ @item.Valor.ToString()</th>
+                            <th>@item.Descricao.ToString()</th>
+                            <th>@item.Nome_Conta.ToString()</th>
+                            <th>@item.Nome_Plano_Conta.ToString()</th>
+                        </tr>
+                        @{ 
+                            if(item.Tipo == "R")
+                            {
+                                totalReceitas += double.Parse(item.Valor.ToString());
+                            }
+                            else
+                            {
+                                totalDespesas += double.Parse(item.Valor.ToString());
+                            }
+                            total = totalReceitas - totalDespesas;
+                        }
+                    </tbody>
+                }
+            }
+        </table>
+    </div>
+</div>
+<h3><strong>Saldo: </strong>R$ @total
+</h3>
+
+<script>
+    function Criar() {
+        window.location.href = "../Transacao/Registrar";
+    }
+
+    function Excluir(id) {
+        window.location.href = "../Transacao/ExcluirTransacao/" + id;
+    }
+
+    function Editar(id) {
+        window.location.href = "../Transacao/Registrar/" + id;
+    }
+</script>

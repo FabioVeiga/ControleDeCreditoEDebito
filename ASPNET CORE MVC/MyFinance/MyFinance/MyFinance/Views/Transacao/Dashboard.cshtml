@@ -1,0 +1,62 @@
+﻿@model TransacaoModel
+
+<h3>Meu Dashboard</h3>
+@*impedencia da biblioteca online*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+
+
+<div id="canvas-holder" style="width:50%">
+    <canvas id="chart-area"></canvas>
+</div>
+
+<script>
+    var randomScalingFactor = function () {
+        return Math.round(Math.random() * 100);
+    };
+
+    var config = {
+        type: 'pie',
+        data: {
+            datasets: [{
+                data: [@Html.Raw(ViewBag.Valores)],
+                backgroundColor: [@Html.Raw(ViewBag.Cores)],
+                label: 'Dataset 1'
+            }],
+            labels: [@Html.Raw(ViewBag.Labels)]
+        },
+        options: {
+            responsive: true
+        }
+    };
+
+    window.onload = function () {
+        var ctx = document.getElementById('chart-area').getContext('2d');
+        window.myPie = new Chart(ctx, config);
+    };
+
+</script>
+<br />
+<div class="container">
+    <form asp-controller="Transacao" asp-action="Dashboard">
+        <div class="form-group">
+            <label>Data transacao (inicio):</label>
+            <input type="date" class="form-control" asp-for="Data">
+        </div>
+
+        <div class="form-group">
+            <label>Data transacao (fim):</label>
+            <input type="date" class="form-control" asp-for="DataFinal">
+        </div>
+        <label>Tipo: </label>
+        <div class="radio">
+            <label><input type="radio" asp-for="Tipo" value="A" checked>Receitas e Despesas</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" asp-for="Tipo" value="R">Receitas</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" asp-for="Tipo" value="D">Despesas</label>
+        </div>
+        <button type="submit" class="btn btn-success btn-block">Consultar</button>
+    </form>
+</div>
